@@ -63,12 +63,12 @@ export default function DashboardPage() {
           Chat with Goku himself- He knows it all.
         </p>
       </div>
-      <div className="px-4 md:px-16 lg:px-30 space-y-4">
+      <div className="px-8 md:px-16 lg:px-30 space-y-4">
         {tools.map((tool) => (
           <Card
             key={tool.href}
             className="p-4 border-black/5 flex items-center justify-between
-             hover:scale-110 transition cursor-pointer"
+             hover:scale-105 transition cursor-pointer"
           >
             <div className="flex items-center gap-x-4">
               <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
