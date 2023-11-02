@@ -1,4 +1,4 @@
-"user client";
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ import {
   VideoIcon,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 const tools = [
   {
     label: "Conversation",
@@ -53,6 +54,7 @@ const tools = [
   },
 ];
 export default function DashboardPage() {
+  const router = useRouter();
   return (
     <div>
       <div className="mb-8 space-y-4">
@@ -66,6 +68,7 @@ export default function DashboardPage() {
       <div className="px-8 md:px-16 lg:px-30 space-y-4">
         {tools.map((tool) => (
           <Card
+            onClick={() => router.push(tool.href)}
             key={tool.href}
             className="p-4 border-black/5 flex items-center justify-between
              hover:scale-105 transition cursor-pointer"
