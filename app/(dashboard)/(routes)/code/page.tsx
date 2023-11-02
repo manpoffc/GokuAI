@@ -1,6 +1,6 @@
 "use client";
 import Heading from "@/components/heading";
-import { MessageSquare } from "lucide-react";
+import { Code, MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -15,9 +15,11 @@ import { ChatCompletionMessage } from "openai/resources/index.mjs";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
+
+import Markdown from "react-markdown";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
-const ConversationPage = () => {
+const CodePage = () => {
   const [messages, setMessages] = useState<ChatCompletionMessage[]>([]);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,7 +36,7 @@ const ConversationPage = () => {
         content: values.prompt,
       };
       const newMessages = [...messages, userMessage];
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post("/api/code", {
         messages: newMessages,
       });
       setMessages((current) => [...current, userMessage, response.data]);
@@ -49,11 +51,11 @@ const ConversationPage = () => {
   return (
     <div className="text-white">
       <Heading
-        title="Conversation"
-        description="Talk to Goku AI and know all your answers"
-        icon={MessageSquare}
-        iconColor="text-red-500"
-        bgColor="bg-red-50"
+        title="Code Generation"
+        description="Generate Code with Goku AI"
+        icon={Code}
+        iconColor="text-emerald-500"
+        bgColor="bg-emerald-50"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -81,7 +83,7 @@ const ConversationPage = () => {
                       <Input
                         className=" bg-slate-200 text-gray-800 outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
                         disabled={isLoading}
-                        placeholder="Is Vegeta really the best?"
+                        placeholder="Generate Todo List with react."
                         {...field}
                       />
                     </FormControl>
@@ -118,7 +120,24 @@ const ConversationPage = () => {
                 )}
               >
                 {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p className="text-sm">{message.content}</p>
+                <Markdown
+                  components={{
+                    pre: ({ node, ...props }) => (
+                      <div className="overflow-auto w-full my-2 bg-slate-200 text-gray-800  p-8 rounded-lg">
+                        <pre {...props} />
+                      </div>
+                    ),
+                    code: ({ node, ...props }) => (
+                      <code
+                        className="bg-slate-200 text-gray-800 rounded-lg p-1"
+                        {...props}
+                      />
+                    ),
+                  }}
+                  className="text-sm overflow-hidden leading-7"
+                >
+                  {message.content}
+                </Markdown>
               </div>
             ))}
           </div>
@@ -128,4 +147,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default CodePage;
